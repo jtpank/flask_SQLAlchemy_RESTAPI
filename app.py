@@ -3,24 +3,21 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
 
-#init app
+#app
 app = Flask(__name__)
 
-#example
-#@app.route('/', methods=['GET'])
-#def get():
-#    return jsonify({'blah': 'message'})
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-#Database
+
+#db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#Init DB
+#intialize db
 db = SQLAlchemy(app)
-#Init Marshmallow
+#initialize Marshmallow
 ma = Marshmallow(app)
 
-#Product class/model
+#product model
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
@@ -34,12 +31,12 @@ class Product(db.Model):
         self.price = price
         self.quantity = quantity
 
-#Product Schema
+#schema
 class ProductSchema(ma.Schema):
     class Meta:
         fields = ('id', 'name', 'description', 'price', 'quantity')
 
-#Initialize Schema
+#initialize schema
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
 
